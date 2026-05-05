@@ -24,8 +24,8 @@ return new class extends Migration
             $table->time('hora_inicio_nuevo')->nullable();
             $table->time('hora_fin_anterior');
             $table->time('hora_fin_nuevo')->nullable();
-            $table->date('fecha_cambio');
-            $table->text('motivo');
+            $table->date('fecha_cambio')->nullable();
+            $table->text('motivo')->nullable();
             $table->timestamps();
         });
     }
