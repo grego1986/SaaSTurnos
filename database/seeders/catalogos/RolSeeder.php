@@ -14,11 +14,11 @@ class RolSeeder extends Seeder
     public function run(): void
     {
     DB::table('roles')->insert([
-    ['codigo' => 'SUPER_USER','nombre' => 'Super_User'],
-    ['codigo' => 'ADMIN','nombre' => 'Admin'],
-    ['codigo' => 'OPERADOR','nombre' => 'Operador'],
-    ['codigo' => 'RECURSO','nombre' => 'Recurso'],
-    ['codigo' => 'CLIENTE','nombre' => 'Cliente']
+    ['codigo' => 'SUPER_USER','rol' => 'Super_User'],
+    ['codigo' => 'ADMIN','rol' => 'Admin'],
+    ['codigo' => 'OPERADOR','rol' => 'Operador'],
+    ['codigo' => 'RECURSO','rol' => 'Recurso'],
+    ['codigo' => 'CLIENTE','rol' => 'Cliente']
 ]);
     }
 }

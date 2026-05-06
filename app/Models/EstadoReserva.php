@@ -44,4 +44,15 @@ class EstadoReserva extends Model
         return $this->hasMany(Reserva::class, 'estado_reserva_id');
     }
 
+    /*
+    |-------------------------------------------------------------------
+    | MÉTODOS PERSONALIZADOS
+    |-------------------------------------------------------------------
+    */
+
+    public static function idPorCodigo( $codigo)
+    {
+        return self::where('codigo', $codigo)->firstOrFail();
+    }
+
 }

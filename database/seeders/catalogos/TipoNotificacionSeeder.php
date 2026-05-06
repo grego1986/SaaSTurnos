@@ -1,6 +1,6 @@
 <?php
 
-namespace Database\Seeders;
+namespace Database\Seeders\catalogos;
 
 //use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
@@ -14,10 +14,10 @@ class TipoNotificacionSeeder extends Seeder
     public function run(): void
     {
         DB::table('tipos_notificaciones')->insert([
-            ['codigo' => 'RECORDATORIO','nombre' => 'Recordatorio'],
-            ['codigo' => 'CONFIRMACION','nombre' => 'Confirmación'],
-            ['codigo' => 'CANCELACION','nombre' => 'Cancelacion'],
-            ['codigo' => 'SENA_PENDIENTE','nombre' => 'Seña_Pendiente']
+            ['codigo' => 'RECORDATORIO','tipo' => 'Recordatorio'],
+            ['codigo' => 'CONFIRMACION','tipo' => 'Confirmación'],
+            ['codigo' => 'CANCELACION','tipo' => 'Cancelacion'],
+            ['codigo' => 'SENA_PENDIENTE','tipo' => 'Seña_Pendiente']
         ]);
     }
 }

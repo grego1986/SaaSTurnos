@@ -16,7 +16,7 @@ class MensajeNotificacionSeeder extends Seeder
         DB::table('mensajes_notificaciones')->insert([
             [
              'codigo' => 'confirmacion',
-             'tirulo' => 'Confirmación',
+             'titulo' => 'Confirmación',
              'contenido' => 'Su turno ha sido confirmado con éxito.',
              'editable' => false
             ],
