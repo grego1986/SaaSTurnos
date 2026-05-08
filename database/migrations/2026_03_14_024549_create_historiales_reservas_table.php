@@ -16,16 +16,8 @@ return new class extends Migration
             $table->foreignId('reserva_id')->constrained('reservas')->cascadeOnDelete();
             $table->foreignId('actor_id')->constrained('actores')->cascadeOnDelete();
             $table->foreignId('accion_id')->constrained('acciones')->cascadeOnDelete();
-            $table->foreignId('estado_anterior_id')->constrained('estados_reservas')->cascadeOnDelete();
-            $table->foreignId('estado_nuevo_id')->constrained('estados_reservas')->cascadeOnDelete();
-            $table->date('fecha_anterior');
-            $table->date('fecha_nueva')->nullable();
-            $table->time('hora_inicio_anterior');
-            $table->time('hora_inicio_nuevo')->nullable();
-            $table->time('hora_fin_anterior');
-            $table->time('hora_fin_nuevo')->nullable();
-            $table->date('fecha_cambio')->nullable();
-            $table->text('motivo')->nullable();
+            $table->foreignId('estado_id')->constrained('estados_reservas')->cascadeOnDelete();
+            $table->date('fecha');
             $table->timestamps();
         });
     }

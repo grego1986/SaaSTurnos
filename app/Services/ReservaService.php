@@ -7,6 +7,7 @@ use App\Models\AgendaRecurso;
 use App\Models\EstadoReserva;
 use App\Models\HistorialReserva;
 use App\Models\Accion;
+use App\Models\MovimientoReserva;
 use Exception;
 use Illuminate\Support\Facades\DB;
 
@@ -17,7 +18,9 @@ class ReservaService
 
         return DB::transaction(function () use ($data) {
             // 1. Obtener agenda
-            $agenda = AgendaRecurso::findOrFail($data['agenda_recurso_id']);
+            $agenda = AgendaRecurso::where('id', $data['agenda_recurso_id'])
+                ->lockForUpdate() //bloquea el registro para evitar condiciones de carrera.
+                ->firstOrFail();
             // 2. Validar disponibilidad
             if (!$agenda->estaDisponible()) {
                 throw new Exception('El turno no está disponible');
@@ -26,7 +29,7 @@ class ReservaService
             // 3. Crear reserva
             $reserva = Reserva::create([
                 'agenda_recurso_id' => $agenda->id,
-                'estado_reserva_id' => EstadoReserva::idPorCodigo(EstadoReserva::CONFIRMADA),
+                'estado_reserva_id' => EstadoReserva::idPorCodigo('CONFIRMADA'),
                 'actor_id' => $data['actor_id'],
                 'persona_id' => $data['persona_id'],
                 'recurso_servicio_id' => $data['recurso_servicio_id'],
@@ -37,23 +40,23 @@ class ReservaService
 
             // 4. Actualizar agenda
             $agenda->update([
-                    'estado_reserva_id' => EstadoReserva::idPorCodigo(EstadoReserva::CONFIRMADA)
-                ]);
+                'estado_reserva_id' => EstadoReserva::idPorCodigo('CONFIRMADA')
+            ]);
 
             // 5. Registrar historial
-            HistorialReserva::create([
+            $historial = HistorialReserva::create([
                 'reserva_id' => $reserva->id,
                 'actor_id' => $data['actor_id'],
                 'accion_id' => Accion::idPorCodigo('CREADA'),
-                'estado_anterior_id' => EstadoReserva::idPorCodigo('LIBRE'),
-                'estado_nuevo_id' => EstadoReserva::idPorCodigo('CONFIRMADA'),
-                'fecha_anterior' => null,
-                'fecha_nueva' => $agenda->fecha,
-                'hora_inicio_anterior' => null,
-                'hora_inicio_nuevo' => $agenda->hora_inicio,
-                'hora_fin_anterior' => null,
-                'hora_fin_nuevo' => $agenda->hora_fin,
-                'fecha_cambio' => now(),
+                'estado_id' => EstadoReserva::idPorCodigo('CONFIRMADA'),
+                'fecha' => now(),
+            ]);
+
+            MovimientoReserva::create([
+                'historial_reserva_id' => $historial->id,
+                'fecha_reserva' => $agenda->fecha,
+                'hora_inicio' => $agenda->hora_inicio,
+                'hora_fin' => $agenda->hora_fin,
                 'motivo' => 'Creación de reserva',
             ]);
 
@@ -61,12 +64,7 @@ class ReservaService
         });
     }
 
-    public function getReservaById($id)
-    {
-        return Reserva::find($id);
-    }
-
-    public function updateReserva($id, array $data)
+    public function updateReserva(int $id, array $data)
     {
         $reserva = Reserva::find($id);
         if ($reserva) {
