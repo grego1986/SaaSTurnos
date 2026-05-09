@@ -5,15 +5,13 @@ namespace App\Services;
 use App\Models\Reserva;
 use App\Models\AgendaRecurso;
 use App\Models\EstadoReserva;
-use App\Models\HistorialReserva;
-use App\Models\Accion;
-use App\Models\MovimientoReserva;
+use App\Services\HistorialReservaService;
 use Exception;
 use Illuminate\Support\Facades\DB;
 
 class ReservaService
 {
-    public function createReserva(array $data)
+    public static function createReserva(array $data)
     {
 
         return DB::transaction(function () use ($data) {
@@ -44,27 +42,12 @@ class ReservaService
             ]);
 
             // 5. Registrar historial
-            $historial = HistorialReserva::create([
-                'reserva_id' => $reserva->id,
-                'actor_id' => $data['actor_id'],
-                'accion_id' => Accion::idPorCodigo('CREADA'),
-                'estado_id' => EstadoReserva::idPorCodigo('CONFIRMADA'),
-                'fecha' => now(),
-            ]);
-
-            MovimientoReserva::create([
-                'historial_reserva_id' => $historial->id,
-                'fecha_reserva' => $agenda->fecha,
-                'hora_inicio' => $agenda->hora_inicio,
-                'hora_fin' => $agenda->hora_fin,
-                'motivo' => 'Creación de reserva',
-            ]);
-
-            return $reserva;
+            HistorialReservaService::createHistorialReserva($reserva, $agenda, $data['actor_id']);
         });
+
     }
 
-    public function updateReserva(int $id, array $data)
+    public static function updateReserva(int $id, array $data)
     {
         $reserva = Reserva::find($id);
         if ($reserva) {
@@ -74,7 +57,7 @@ class ReservaService
         return null;
     }
 
-    public function deleteReserva($id)
+    public static function deleteReserva($id)
     {
         $reserva = Reserva::find($id);
         if ($reserva) {

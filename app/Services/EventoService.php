@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Models\Evento;
 use Exception;
 use Illuminate\Support\Facades\DB;
 
