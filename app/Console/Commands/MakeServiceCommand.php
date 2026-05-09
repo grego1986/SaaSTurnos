@@ -42,6 +42,7 @@ class MakeServiceCommand extends Command
 
 namespace App\Services;
 
+use App\Models\\{$name};
 use Exception;
 use Illuminate\Support\Facades\DB;
 

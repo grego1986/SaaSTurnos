@@ -40,11 +40,11 @@ class MakeQueryServiceCommand extends Command
         $stub = <<<PHP
 <?php
 
-namespace App\Services;
+namespace App\Queries;
 
 use App\Models\\{$name};
 
-class {$name}QueryService
+class {$name}Query
 {
 
     // Métodos de consulta
