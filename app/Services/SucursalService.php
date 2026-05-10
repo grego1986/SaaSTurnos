@@ -11,7 +11,6 @@ class SucursalService
 
      public function createSucursal(array $data)
     {
-        try {
             return DB::transaction(function () use ($data) {
                 // Validar datos de entrada
                 if (empty($data['nombre'])) {
@@ -31,10 +30,6 @@ class SucursalService
 
                 return $sucursal;
             });
-        } catch (Exception $e) {
-            // Manejar excepciones y errores
-            throw new Exception('Error al crear la sucursal: ' . $e->getMessage());
-        }
     }
 
     public function updateSucursal(int $id, array $data)

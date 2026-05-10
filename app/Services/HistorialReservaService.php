@@ -13,7 +13,7 @@ use Illuminate\Support\Facades\DB;
 class HistorialReservaService
 {
 
-    public static function createHistorialReserva(Reserva $reserva, Agendarecurso $agenda, int $actorId)
+    public static function createHistorialReserva(Reserva $reserva, AgendaRecurso $agenda, int $actorId)
     {
         $historial = HistorialReserva::create([
             'reserva_id' => $reserva->id,
@@ -25,6 +25,7 @@ class HistorialReservaService
 
         MovimientoReservaService::createMovimientoReserva($agenda, $historial->id);
 
+        return $historial;
     }
 
     public function updateHistorialReserva(int $id, array $data)
